@@ -1,0 +1,57 @@
+CN_Prefix,Match_Type,Coverage,Description,Sector,Reference
+25070080,EXACT,INCLUDE,Other kaolinic clays,Cement,Annex I - Cement
+25231000,EXACT,INCLUDE,Cement clinkers,Cement,Annex I - Cement
+25232100,EXACT,INCLUDE,"White Portland cement, whether or not artificially coloured",Cement,Annex I - Cement
+25232900,EXACT,INCLUDE,Other Portland cement,Cement,Annex I - Cement
+25233000,EXACT,INCLUDE,Aluminous cement,Cement,Annex I - Cement
+25239000,EXACT,INCLUDE,Other hydraulic cements,Cement,Annex I - Cement
+27160000,EXACT,INCLUDE,Electrical energy,Electricity,Annex I - Electricity
+28080000,EXACT,INCLUDE,Nitric acid; sulphonitric acids,Fertilisers,Annex I - Fertilisers
+2814,PREFIX,INCLUDE,"Ammonia, anhydrous or in aqueous solution",Fertilisers,Annex I - Fertilisers
+28342100,EXACT,INCLUDE,Nitrates of potassium,Fertilisers,Annex I - Fertilisers
+3102,PREFIX,INCLUDE,"Mineral or chemical fertilisers, nitrogenous",Fertilisers,Annex I - Fertilisers
+3105,PREFIX,INCLUDE,"Mineral or chemical fertilisers containing two or three of the fertilising elements nitrogen, phosphorus and potassium; other fertilisers; goods of this chapter in tablets or similar forms or in packages of a gross weight not exceeding 10 kg (Except: 3105 60 00)",Fertilisers,Annex I - Fertilisers
+31056000,EXACT,EXCLUDE,"Mineral or chemical fertilisers containing the two fertilising elements phosphorus and potassium (EXCLUDED from CN 3105 heading per Annex I exception)",,Annex I - Fertilisers
+72,PREFIX,INCLUDE,"Iron and steel (Except the ferro-alloys and ferrous waste/scrap listed below)",Iron and Steel,Annex I - Iron and steel
+72022,PREFIX,EXCLUDE,"Ferro-silicon (EXCLUDED from CN 72 heading per Annex I exception)",,Annex I - Iron and steel (Except)
+72023000,EXACT,EXCLUDE,"Ferro-silico-manganese (EXCLUDED from CN 72 heading per Annex I exception)",,Annex I - Iron and steel (Except)
+72025000,EXACT,EXCLUDE,"Ferro-silico-chromium (EXCLUDED from CN 72 heading per Annex I exception)",,Annex I - Iron and steel (Except)
+72027000,EXACT,EXCLUDE,"Ferro-molybdenum (EXCLUDED from CN 72 heading per Annex I exception)",,Annex I - Iron and steel (Except)
+72028000,EXACT,EXCLUDE,"Ferro-tungsten and ferro-silico-tungsten (EXCLUDED from CN 72 heading per Annex I exception)",,Annex I - Iron and steel (Except)
+72029100,EXACT,EXCLUDE,"Ferro-titanium and ferro-silico-titanium (EXCLUDED from CN 72 heading per Annex I exception)",,Annex I - Iron and steel (Except)
+72029200,EXACT,EXCLUDE,"Ferro-vanadium (EXCLUDED from CN 72 heading per Annex I exception)",,Annex I - Iron and steel (Except)
+72029300,EXACT,EXCLUDE,"Ferro-niobium (EXCLUDED from CN 72 heading per Annex I exception)",,Annex I - Iron and steel (Except)
+720299,PREFIX,EXCLUDE,"Other: (parent subheading, EXCLUDED from CN 72 heading per Annex I exception)",,Annex I - Iron and steel (Except)
+72029910,EXACT,EXCLUDE,"Ferro-phosphorus (EXCLUDED from CN 72 heading per Annex I exception)",,Annex I - Iron and steel (Except)
+72029930,EXACT,EXCLUDE,"Ferro-silico-magnesium (EXCLUDED from CN 72 heading per Annex I exception)",,Annex I - Iron and steel (Except)
+72029980,EXACT,EXCLUDE,"Other (EXCLUDED from CN 72 heading per Annex I exception)",,Annex I - Iron and steel (Except)
+7204,PREFIX,EXCLUDE,"Ferrous waste and scrap; remelting scrap ingots and steel (EXCLUDED from CN 72 heading per Annex I exception)",,Annex I - Iron and steel (Except)
+26011200,EXACT,INCLUDE,"Agglomerated iron ores and concentrates, other than roasted iron pyrites",Iron and Steel,Annex I - Iron and steel
+7301,PREFIX,INCLUDE,"Sheet piling of iron or steel, whether or not drilled, punched or made from assembled elements; welded angles, shapes and sections, of iron or steel",Iron and Steel,Annex I - Iron and steel
+7302,PREFIX,INCLUDE,"Railway or tramway track construction material of iron or steel, the following: rails, check-rails and rack rails, switch blades, crossing frogs, point rods and other crossing pieces, sleepers (cross-ties), fish-plates, chairs, chair wedges, sole plates (base plates), rail clips, bedplates, ties and other material specialised for jointing or fixing rails",Iron and Steel,Annex I - Iron and steel
+730300,PREFIX,INCLUDE,"Tubes, pipes and hollow profiles, of cast iron",Iron and Steel,Annex I - Iron and steel
+7304,PREFIX,INCLUDE,"Tubes, pipes and hollow profiles, seamless, of iron (other than cast iron) or steel",Iron and Steel,Annex I - Iron and steel
+7305,PREFIX,INCLUDE,"Other tubes and pipes (for example, welded, riveted or similarly closed), having circular cross-sections, the external diameter of which exceeds 406,4 mm, of iron or steel",Iron and Steel,Annex I - Iron and steel
+7306,PREFIX,INCLUDE,"Other tubes, pipes and hollow profiles (for example, open seam or welded, riveted or similarly closed), of iron or steel",Iron and Steel,Annex I - Iron and steel
+7307,PREFIX,INCLUDE,"Tube or pipe fittings (for example, couplings, elbows, sleeves), of iron or steel",Iron and Steel,Annex I - Iron and steel
+7308,PREFIX,INCLUDE,"Structures (excluding prefabricated buildings of heading 9406) and parts of structures (for example, bridges and bridge-sections, lock-gates, towers, lattice masts, roofs, roofing frameworks, doors and windows and their frames and thresholds for doors, shutters, balustrades, pillars and columns), of iron or steel; plates, rods, angles, shapes, sections, tubes and the like, prepared for use in structures, of iron or steel",Iron and Steel,Annex I - Iron and steel
+730900,PREFIX,INCLUDE,"Reservoirs, tanks, vats and similar containers for any material (other than compressed or liquefied gas), of iron or steel, of a capacity exceeding 300 l, whether or not lined or heat-insulated, but not fitted with mechanical or thermal equipment",Iron and Steel,Annex I - Iron and steel
+7310,PREFIX,INCLUDE,"Tanks, casks, drums, cans, boxes and similar containers, for any material (other than compressed or liquefied gas), of iron or steel, of a capacity not exceeding 300 l, whether or not lined or heat-insulated, but not fitted with mechanical or thermal equipment",Iron and Steel,Annex I - Iron and steel
+731100,PREFIX,INCLUDE,"Containers for compressed or liquefied gas, of iron or steel",Iron and Steel,Annex I - Iron and steel
+7318,PREFIX,INCLUDE,"Screws, bolts, nuts, coach screws, screw hooks, rivets, cotters, cotter pins, washers (including spring washers) and similar articles, of iron or steel",Iron and Steel,Annex I - Iron and steel
+7326,PREFIX,INCLUDE,Other articles of iron or steel,Iron and Steel,Annex I - Iron and steel
+7601,PREFIX,INCLUDE,Unwrought aluminium,Aluminium,Annex I - Aluminium
+7603,PREFIX,INCLUDE,Aluminium powders and flakes,Aluminium,Annex I - Aluminium
+7604,PREFIX,INCLUDE,"Aluminium bars, rods and profiles",Aluminium,Annex I - Aluminium
+7605,PREFIX,INCLUDE,Aluminium wire,Aluminium,Annex I - Aluminium
+7606,PREFIX,INCLUDE,"Aluminium plates, sheets and strip, of a thickness exceeding 0,2 mm",Aluminium,Annex I - Aluminium
+7607,PREFIX,INCLUDE,"Aluminium foil (whether or not printed or backed with paper, paperboard, plastics or similar backing materials) of a thickness (excluding any backing) not exceeding 0,2 mm",Aluminium,Annex I - Aluminium
+7608,PREFIX,INCLUDE,Aluminium tubes and pipes,Aluminium,Annex I - Aluminium
+76090000,EXACT,INCLUDE,"Aluminium tube or pipe fittings (for example, couplings, elbows, sleeves)",Aluminium,Annex I - Aluminium
+7610,PREFIX,INCLUDE,"Aluminium structures (excluding prefabricated buildings of heading 9406) and parts of structures (for example, bridges and bridge-sections, towers, lattice masts, roofs, roofing frameworks, doors and windows and their frames and thresholds for doors, balustrades, pillars and columns); aluminium plates, rods, profiles, tubes and the like, prepared for use in structures",Aluminium,Annex I - Aluminium
+76110000,EXACT,INCLUDE,"Aluminium reservoirs, tanks, vats and similar containers, for any material (other than compressed or liquefied gas), of a capacity exceeding 300 litres, whether or not lined or heat-insulated, but not fitted with mechanical or thermal equipment",Aluminium,Annex I - Aluminium
+7612,PREFIX,INCLUDE,"Aluminium casks, drums, cans, boxes and similar containers (including rigid or collapsible tubular containers), for any material (other than compressed or liquefied gas), of a capacity not exceeding 300 litres, whether or not lined or heat-insulated, but not fitted with mechanical or thermal equipment",Aluminium,Annex I - Aluminium
+76130000,EXACT,INCLUDE,Aluminium containers for compressed or liquefied gas,Aluminium,Annex I - Aluminium
+7614,PREFIX,INCLUDE,"Stranded wire, cables, plaited bands and the like, of aluminium, not electrically insulated",Aluminium,Annex I - Aluminium
+7616,PREFIX,INCLUDE,Other articles of aluminium,Aluminium,Annex I - Aluminium
+28041000,EXACT,INCLUDE,Hydrogen,Hydrogen,Annex I - Chemicals
