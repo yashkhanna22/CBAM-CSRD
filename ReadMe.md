@@ -1,4 +1,4 @@
-# AI-Native Regulatory Intelligence Platform
+# AI Regulatory Intelligence Platform  
 
 ## Carbon Border Adjustment Mechanism (CBAM) Assessment System
 
