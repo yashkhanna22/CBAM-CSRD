@@ -1,4 +1,4 @@
-# 🤖 AI-Native Regulatory Intelligence Platform
+# AI Regulatory Intelligence Platform
 
 > An AI-powered regulatory assessment platform that combines Large
 > Language Models with deterministic validation to automate EU
@@ -9,7 +9,7 @@
 
 ------------------------------------------------------------------------
 
-# 🚀 Overview
+# Overview
 
 The platform performs AI-assisted regulatory assessments for the
 European Union Carbon Border Adjustment Mechanism (CBAM).
@@ -29,7 +29,7 @@ allowing interchangeable local and cloud inference.
 
 ------------------------------------------------------------------------
 
-# ✨ Features
+# Features
 
 -   AI-powered CBAM assessments
 -   Deterministic regulatory validation
@@ -45,7 +45,7 @@ allowing interchangeable local and cloud inference.
 
 ------------------------------------------------------------------------
 
-# 🏗 Architecture
+# Architecture
 
 ``` text
                     User
@@ -65,7 +65,7 @@ allowing interchangeable local and cloud inference.
  Prompt Builder             Validation Engine
         │                           │
         ▼                           ▲
-      Groq API                     │
+      Groq API                      │
  Llama-3.3-70B / Ollama:Qwen-3.5    │
         │                           │
         ▼                           │
@@ -80,7 +80,7 @@ allowing interchangeable local and cloud inference.
 
 ------------------------------------------------------------------------
 
-# ⚙️ Processing Flow
+# Processing Flow
 
 ``` text
 User Input
@@ -121,7 +121,7 @@ Dashboard Visualization
 
 ------------------------------------------------------------------------
 
-# 📂 Project Structure
+# Project Structure
 
 ``` text
 CBAM-CSRD-Assessment
@@ -155,7 +155,7 @@ CBAM-CSRD-Assessment
 
 ------------------------------------------------------------------------
 
-# 🛠 Technology Stack
+# Technology Stack
 
   Component            Technology
   -------------------- --------------------------
@@ -172,7 +172,7 @@ CBAM-CSRD-Assessment
 
 ------------------------------------------------------------------------
 
-# 🎯 Design Philosophy
+# Design Philosophy
 
 The platform follows an **AI-first with deterministic validation**
 architecture.
@@ -194,9 +194,9 @@ This provides:
 
 ------------------------------------------------------------------------
 
-# 📈 Roadmap
+# Roadmap
 
-### ✅ Completed
+### Completed
 
 -   HTML Dashboard
 -   Python Backend
@@ -208,7 +208,7 @@ This provides:
 -   Regulatory Knowledge Base
 -   Annex I Dataset
 
-### 🚧 In Progress
+### In Progress
 
 -   CSRD Module
 -   Unified Regulatory Dashboard
