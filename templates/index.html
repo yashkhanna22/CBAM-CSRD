@@ -1,0 +1,2126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CBAM AI Regulatory Intelligence Dashboard</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    /* Design Tokens */
+    :root {
+      --bg-dark: #070a13;
+      --bg-panel: rgba(13, 20, 38, 0.45);
+      --bg-panel-hover: rgba(18, 28, 54, 0.6);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --border-hover: rgba(255, 255, 255, 0.15);
+      
+      --color-primary: #14b8a6; /* Teal */
+      --color-primary-rgb: 20, 184, 166;
+      --color-secondary: #0ea5e9; /* Sky Blue */
+      --color-accent: #8b5cf6; /* Violet */
+      
+      --text-main: #f1f5f9;
+      --text-sub: #94a3b8;
+      --text-faint: #64748b;
+      
+      --color-success: #10b981;
+      --color-success-bg: rgba(16, 185, 129, 0.12);
+      --color-warning: #f59e0b;
+      --color-warning-bg: rgba(245, 158, 11, 0.12);
+      --color-danger: #ef4444;
+      --color-danger-bg: rgba(239, 68, 68, 0.12);
+      --color-info: #06b6d4;
+      --color-info-bg: rgba(6, 182, 212, 0.12);
+      
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-display: 'Outfit', var(--font-sans);
+      --font-mono: 'JetBrains Mono', monospace;
+      
+      --transition-default: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.5;
+    }
+
+    /* Background Gradients */
+    .bg-blobs {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(140px);
+      opacity: 0.12;
+    }
+    
+    .blob-1 {
+      top: -10%;
+      right: 10%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, var(--color-primary) 0%, transparent 80%);
+    }
+    
+    .blob-2 {
+      bottom: 10%;
+      left: -5%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, var(--color-secondary) 0%, transparent 80%);
+    }
+    
+    .blob-3 {
+      top: 40%;
+      right: 30%;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, var(--color-accent) 0%, transparent 80%);
+    }
+
+    /* Layout */
+    .header-bar {
+      height: 2px;
+      width: 100%;
+      background: linear-gradient(90deg, var(--color-primary), var(--color-secondary), var(--color-accent), var(--color-primary));
+      background-size: 300% 100%;
+      animation: shimmerMove 8s linear infinite;
+    }
+
+    header {
+      background: rgba(7, 10, 19, 0.8);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+
+    .header-container {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+      display: grid;
+      place-items: center;
+      box-shadow: 0 4px 15px rgba(20, 184, 166, 0.3);
+    }
+
+    .brand-icon svg {
+      width: 20px;
+      height: 20px;
+      color: #fff;
+    }
+
+    .brand-text {
+      line-height: 1.2;
+    }
+
+    .brand-title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.15rem;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-subtitle {
+      font-size: 0.7rem;
+      color: var(--text-sub);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .system-status {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      padding: 0.35rem 0.85rem;
+      border-radius: 99px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: var(--color-success);
+      box-shadow: 0 0 8px var(--color-success);
+    }
+
+    .active-llm-indicator {
+      font-size: 0.75rem;
+      color: var(--text-sub);
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .active-llm-indicator strong {
+      color: var(--text-main);
+    }
+
+    /* Main Grid */
+    main {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 2rem;
+      display: grid;
+      grid-template-columns: 460px 1fr;
+      gap: 2rem;
+    }
+
+    @media (max-width: 1200px) {
+      main {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Panel Card Styles */
+    .card {
+      background: var(--bg-panel);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      padding: 1.75rem;
+      transition: var(--transition-default);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    }
+
+    .card:hover {
+      border-color: var(--border-hover);
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3);
+    }
+
+    .card-title {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 1.15rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .card-title svg {
+      width: 18px;
+      height: 18px;
+      color: var(--color-primary);
+    }
+
+    /* Forms */
+    .form-group-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .form-group-full {
+      grid-column: span 2;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .field-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-sub);
+    }
+
+    input[type="text"], input[type="number"] {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 0.65rem 0.85rem;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      outline: none;
+      transition: var(--transition-default);
+      width: 100%;
+    }
+
+    input[type="text"]:focus, input[type="number"]:focus {
+      border-color: var(--color-primary);
+      background: rgba(255, 255, 255, 0.05);
+      box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.15);
+    }
+
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 0.85rem;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      margin-bottom: 0.75rem;
+      cursor: pointer;
+      user-select: none;
+      transition: var(--transition-default);
+    }
+
+    .toggle-row:hover {
+      border-color: var(--border-hover);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .toggle-label {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-main);
+    }
+
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 38px;
+      height: 20px;
+    }
+
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(255, 255, 255, 0.1);
+      transition: .3s;
+      border-radius: 34px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 14px;
+      width: 14px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .3s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: var(--color-primary);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(18px);
+    }
+
+    /* Products Section */
+    .products-container {
+      max-height: 480px;
+      overflow-y: auto;
+      padding-right: 0.25rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .product-item {
+      border: 1px solid var(--border-color);
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 16px;
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+      position: relative;
+      animation: fadeUp 0.3s ease;
+      transition: var(--transition-default);
+    }
+
+    .product-item:hover {
+      border-color: var(--border-hover);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .product-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.5rem;
+    }
+
+    .product-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--color-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .btn-delete-product {
+      background: transparent;
+      border: none;
+      color: var(--color-danger);
+      cursor: pointer;
+      opacity: 0.6;
+      transition: var(--transition-default);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-delete-product:hover {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+
+    /* Autocomplete Lookup for CN Code */
+    .autocomplete-wrapper {
+      position: relative;
+      width: 100%;
+    }
+
+    .autocomplete-dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: #0f172a;
+      border: 1px solid var(--border-hover);
+      border-radius: 10px;
+      max-height: 200px;
+      overflow-y: auto;
+      z-index: 50;
+      margin-top: 4px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      display: none;
+    }
+
+    .autocomplete-item {
+      padding: 0.6rem 0.85rem;
+      cursor: pointer;
+      font-size: 0.8rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      transition: var(--transition-default);
+      text-align: left;
+    }
+
+    .autocomplete-item:hover {
+      background: rgba(20, 184, 166, 0.15);
+      color: var(--color-primary);
+    }
+
+    .autocomplete-item .sector-tag {
+      float: right;
+      font-size: 0.7rem;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 0.1rem 0.4rem;
+      border-radius: 4px;
+      color: var(--text-sub);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.65rem 1.25rem;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition-default);
+      border: none;
+      outline: none;
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--border-hover);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+      color: #fff;
+      box-shadow: 0 4px 15px rgba(20, 184, 166, 0.2);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(20, 184, 166, 0.35);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .btn-run {
+      width: 100%;
+      padding: 1rem;
+      font-size: 1rem;
+      margin-top: 1rem;
+      border-radius: 16px;
+    }
+
+    /* Recent Searches */
+    .recent-searches-box {
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .recent-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-bottom: 0.75rem;
+      letter-spacing: 0.05em;
+    }
+
+    .recent-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .recent-item {
+      padding: 0.6rem 0.85rem;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: var(--transition-default);
+    }
+
+    .recent-item:hover {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: var(--color-primary);
+    }
+
+    .recent-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+
+    .recent-company {
+      font-weight: 600;
+    }
+
+    .recent-meta {
+      font-size: 0.7rem;
+      color: var(--text-faint);
+    }
+
+    /* RIGHT PANEL STATES */
+    .idle-state {
+      height: 100%;
+      min-height: 600px;
+      border: 2px dashed rgba(255, 255, 255, 0.08);
+      border-radius: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+      background: rgba(7, 10, 19, 0.2);
+    }
+
+    .idle-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 20px;
+      background: rgba(20, 184, 166, 0.08);
+      display: grid;
+      place-items: center;
+      margin-bottom: 1.5rem;
+      color: var(--color-primary);
+    }
+
+    .idle-icon svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    .idle-title {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .idle-text {
+      color: var(--text-sub);
+      font-size: 0.9rem;
+      max-width: 320px;
+      line-height: 1.6;
+    }
+
+    /* Loading Activity Panel */
+    .activity-overlay {
+      background: rgba(7, 10, 19, 0.85);
+      backdrop-filter: blur(12px);
+      border-radius: 24px;
+      padding: 2.5rem;
+      text-align: center;
+      border: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 600px;
+      width: 100%;
+    }
+
+    .loading-spinner-glow {
+      position: relative;
+      width: 70px;
+      height: 70px;
+      margin-bottom: 2rem;
+    }
+
+    .loading-ring {
+      width: 100%;
+      height: 100%;
+      border: 3px solid rgba(20, 184, 166, 0.1);
+      border-top-color: var(--color-primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    .loading-ring-inner {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      right: 10px;
+      bottom: 10px;
+      border: 3px solid rgba(14, 165, 233, 0.1);
+      border-bottom-color: var(--color-secondary);
+      border-radius: 50%;
+      animation: spinBack 1.5s linear infinite;
+    }
+
+    .activity-title {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+    }
+
+    .activity-steps {
+      max-width: 380px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      text-align: left;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .activity-step-row {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      font-size: 0.85rem;
+      padding: 0.65rem 0.85rem;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      transition: var(--transition-default);
+    }
+
+    .activity-step-row.active {
+      border-color: var(--color-primary);
+      background: rgba(20, 184, 166, 0.05);
+    }
+
+    .activity-step-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--text-faint);
+    }
+
+    .activity-step-row.active .activity-step-indicator {
+      background: var(--color-primary);
+      box-shadow: 0 0 8px var(--color-primary);
+      animation: pulse 1.2s ease-in-out infinite;
+    }
+
+    .activity-step-row.completed .activity-step-indicator {
+      background: var(--color-success);
+    }
+
+    .activity-step-row.completed {
+      opacity: 0.6;
+    }
+
+    .activity-step-text {
+      color: var(--text-sub);
+      font-weight: 500;
+    }
+
+    .activity-step-row.active .activity-step-text {
+      color: var(--text-main);
+    }
+
+    /* ASSESSMENT RESULTS UI */
+    .results-container {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      animation: fadeUp 0.4s ease;
+    }
+
+    /* Summary Dashboard Grid */
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+    }
+
+    @media (max-width: 600px) {
+      .summary-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .summary-card {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .summary-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--text-sub);
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .summary-card-header svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .summary-card-value {
+      font-family: var(--font-display);
+      font-size: 1.75rem;
+      font-weight: 700;
+      line-height: 1.1;
+    }
+
+    .summary-card.applicable {
+      border-color: rgba(239, 68, 68, 0.2);
+    }
+    
+    .summary-card.applicable .summary-card-value {
+      color: var(--color-danger);
+    }
+
+    .summary-card.not-applicable {
+      border-color: rgba(16, 185, 129, 0.2);
+    }
+
+    .summary-card.not-applicable .summary-card-value {
+      color: var(--color-success);
+    }
+
+    /* Progress ring / bar inside summary */
+    .progress-bar-container {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+      border-radius: 99px;
+    }
+
+    /* AI Executive Summary Block */
+    .exec-summary-card {
+      background: linear-gradient(135deg, rgba(20, 184, 166, 0.08), rgba(8, 145, 178, 0.03));
+      border: 1px solid rgba(20, 184, 166, 0.2);
+      border-radius: 20px;
+      padding: 1.5rem;
+      position: relative;
+    }
+
+    .exec-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      font-size: 0.9rem;
+    }
+
+    .exec-header svg {
+      width: 16px;
+      height: 16px;
+      color: var(--color-primary);
+    }
+
+    .exec-text {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: var(--text-main);
+    }
+
+    /* Table styles */
+    .summary-table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.85rem;
+    }
+
+    th {
+      padding: 0.75rem 1rem;
+      font-weight: 600;
+      color: var(--text-faint);
+      border-bottom: 1px solid var(--border-color);
+      text-transform: uppercase;
+      font-size: 0.7rem;
+      letter-spacing: 0.05em;
+    }
+
+    td {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: middle;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 99px;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+
+    .badge-success {
+      background: var(--color-success-bg);
+      color: var(--color-success);
+    }
+
+    .badge-danger {
+      background: var(--color-danger-bg);
+      color: var(--color-danger);
+    }
+
+    .badge-warning {
+      background: var(--color-warning-bg);
+      color: var(--color-warning);
+    }
+
+    .badge-neutral {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-sub);
+    }
+
+    /* Per-Product Assessment Cards */
+    .product-result-card {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+      transition: var(--transition-default);
+    }
+
+    .product-result-card:hover {
+      border-color: var(--border-hover);
+    }
+
+    .product-result-header {
+      padding: 1.25rem 1.5rem;
+      background: rgba(255, 255, 255, 0.02);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+
+    .product-result-header-left {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .product-result-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.04);
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      color: var(--color-primary);
+      font-size: 0.9rem;
+    }
+
+    .product-result-name {
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    .product-result-meta {
+      font-size: 0.75rem;
+      color: var(--text-sub);
+      margin-top: 0.15rem;
+    }
+
+    .product-result-body {
+      padding: 1.5rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 800px) {
+      .product-result-body {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Rule Chain / Left Section */
+    .rule-chain-section {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .rule-chain-title {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      letter-spacing: 0.05em;
+    }
+
+    .rule-step-box {
+      border: 1px solid var(--border-color);
+      background: rgba(7, 10, 19, 0.2);
+      border-radius: 12px;
+      padding: 1rem;
+      transition: var(--transition-default);
+    }
+
+    .rule-step-box.pass {
+      border-left: 3px solid var(--color-success);
+    }
+
+    .rule-step-box.fail {
+      border-left: 3px solid var(--color-danger);
+    }
+
+    .rule-step-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-weight: 600;
+      font-size: 0.8rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .rule-step-header .status-tag {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .rule-step-header.pass .status-tag {
+      color: var(--color-success);
+    }
+
+    .rule-step-header.fail .status-tag {
+      color: var(--color-danger);
+    }
+
+    .rule-step-desc {
+      font-size: 0.8rem;
+      color: var(--text-sub);
+      line-height: 1.45;
+    }
+
+    .rule-step-ref {
+      font-size: 0.7rem;
+      color: var(--color-secondary);
+      margin-top: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    /* AI Narrative / Right Section */
+    .ai-assessment-section {
+      background: rgba(255, 255, 255, 0.015);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .ai-section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.5rem;
+    }
+
+    .ai-section-title {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      letter-spacing: 0.05em;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .ai-section-title svg {
+      width: 14px;
+      height: 14px;
+      color: var(--color-primary);
+    }
+
+    .override-banner {
+      background: var(--color-warning-bg);
+      border: 1px solid rgba(245, 158, 11, 0.25);
+      border-radius: 8px;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.75rem;
+      color: var(--color-warning);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-weight: 500;
+    }
+
+    .ai-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .ai-field-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      letter-spacing: 0.03em;
+    }
+
+    .ai-reasoning-text {
+      font-size: 0.85rem;
+      line-height: 1.5;
+      color: var(--text-main);
+    }
+
+    .ai-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      margin-top: 0.25rem;
+    }
+
+    .ai-list-item {
+      font-size: 0.8rem;
+      color: var(--text-sub);
+      display: flex;
+      align-items: flex-start;
+      gap: 0.4rem;
+      line-height: 1.4;
+    }
+
+    .ai-list-item:before {
+      content: "•";
+      color: var(--color-primary);
+      font-weight: bold;
+    }
+
+    /* Expand / Collapse Icon */
+    .collapse-chevron {
+      transition: transform 0.2s ease;
+      color: var(--text-faint);
+    }
+    
+    .product-result-card.collapsed .collapse-chevron {
+      transform: rotate(-90deg);
+    }
+
+    .product-result-card.collapsed .product-result-body {
+      display: none;
+    }
+
+    /* JSON Details Panel */
+    .json-details-card {
+      background: #090e18;
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-top: 2rem;
+    }
+
+    .json-header {
+      padding: 1rem 1.5rem;
+      background: rgba(255, 255, 255, 0.02);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+
+    .json-body {
+      padding: 1.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: #94a3b8;
+      overflow-x: auto;
+      max-height: 350px;
+    }
+
+    /* Utility animations */
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes spinBack {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(-360deg); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.3); opacity: 0.5; }
+    }
+
+    @keyframes shimmerMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-blobs">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+
+  <div class="header-bar"></div>
+  
+  <header>
+    <div class="header-container">
+      <div class="brand">
+        <div class="brand-icon">
+          <!-- Leaf / Sparkles Icon Combined -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 3.5 1 8a7 7 0 0 1-9 10Z"></path>
+            <path d="M9 22v-4"></path>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <div class="brand-title">PwC Antigravity</div>
+          <div class="brand-subtitle">CBAM AI Regulatory Intelligence</div>
+        </div>
+      </div>
+
+      <div class="system-status">
+        <div class="active-llm-indicator" id="llm-indicator-banner">
+          LLM Engine: <strong id="llm-model-label">Loading...</strong>
+        </div>
+        <div class="status-badge">
+          <span class="status-dot"></span>
+          <span>Engine Online</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- LEFT INPUT PANEL -->
+    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+      
+      <!-- Company Information Card -->
+      <section class="card">
+        <h3 class="card-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><line x1="9" y1="22" x2="9" y2="16"></line><line x1="15" y1="22" x2="15" y2="16"></line><line x1="9" y1="16" x2="15" y2="16"></line><path d="M8 6h.01"></path><path d="M16 6h.01"></path><path d="M8 10h.01"></path><path d="M16 10h.01"></path><path d="M12 6h.01"></path><path d="M12 10h.01"></path><path d="M8 14h.01"></path><path d="M16 14h.01"></path><path d="M12 14h.01"></path></svg>
+          Company Information
+        </h3>
+        
+        <div class="form-group-grid">
+          <div class="field form-group-full">
+            <span class="field-label">Company Name</span>
+            <input type="text" id="company-name" placeholder="e.g. Meridian Exports Pvt. Ltd.">
+          </div>
+          
+          <div class="field">
+            <span class="field-label">Establishment Country</span>
+            <input type="text" id="company-country" placeholder="e.g. India">
+          </div>
+
+          <div class="field">
+            <span class="field-label">Annual Turnover (€)</span>
+            <input type="number" id="company-turnover" placeholder="e.g. 48000000">
+          </div>
+          
+          <div class="field form-group-full" style="margin-bottom: 0;">
+            <label class="toggle-row">
+              <span class="toggle-label">EU Subsidiary</span>
+              <span class="toggle-switch">
+                <input type="checkbox" id="company-subsidiary">
+                <span class="slider"></span>
+              </span>
+            </label>
+            
+            <label class="toggle-row">
+              <span class="toggle-label">EU Branch Establishment</span>
+              <span class="toggle-switch">
+                <input type="checkbox" id="company-branch">
+                <span class="slider"></span>
+              </span>
+            </label>
+
+            <label class="toggle-row" style="margin-bottom: 0;">
+              <span class="toggle-label">Listed on EU Exchange</span>
+              <span class="toggle-switch">
+                <input type="checkbox" id="company-listed">
+                <span class="slider"></span>
+              </span>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <!-- Products Section Card -->
+      <section class="card" style="display: flex; flex-direction: column; flex: 1;">
+        <div class="card-title" style="justify-content: space-between; margin-bottom: 1.25rem;">
+          <span style="display: flex; align-items: center; gap: 0.5rem;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            Products
+          </span>
+          <button class="btn btn-secondary" onclick="addNewProductForm()" style="padding: 0.45rem 0.85rem; font-size: 0.75rem;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Add Product
+          </button>
+        </div>
+
+        <div class="products-container" id="products-list-wrapper">
+          <!-- Dynamic product items injected here -->
+        </div>
+
+        <button class="btn btn-primary btn-run" id="btn-submit-assessment" onclick="triggerCBAMAssessment()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+          Run CBAM Assessment
+        </button>
+
+        <!-- History/Recent Searches -->
+        <div class="recent-searches-box">
+          <div class="recent-title">Recent Configurations</div>
+          <div class="recent-list" id="recent-configs-list">
+            <!-- Dynamic history links -->
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- RIGHT RESULTS / STATUS PANEL -->
+    <div id="right-panel-viewport" style="width: 100%;">
+      
+      <!-- IDLE STATE -->
+      <div class="idle-state" id="panel-state-idle">
+        <div class="idle-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+        </div>
+        <h3 class="idle-title">Awaiting Assessment parameters</h3>
+        <p class="idle-text">Enter company specifics and target product attributes on the left panel, then run the engine to execute the CBAM rule chain and generate AI compliance narratives.</p>
+      </div>
+
+      <!-- RUNNING / STREAMING STATE -->
+      <div class="activity-overlay" id="panel-state-running" style="display: none;">
+        <div class="loading-spinner-glow">
+          <div class="loading-ring"></div>
+          <div class="loading-ring-inner"></div>
+        </div>
+        <h3 class="activity-title">Evaluating CBAM Rules</h3>
+        <div class="activity-steps" id="running-activity-steps-container">
+          <!-- Dynamic progress lines yield here -->
+        </div>
+      </div>
+
+      <!-- COMPLETED RESULTS STATE -->
+      <div class="results-container" id="panel-state-results" style="display: none;">
+        
+        <!-- Summary Cards Grid -->
+        <div class="summary-grid">
+          <div class="summary-card" id="summary-card-verdict">
+            <div class="summary-card-header">
+              <span>Overall Applicability</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            </div>
+            <div class="summary-card-value" id="summary-val-verdict">--</div>
+          </div>
+          
+          <div class="summary-card">
+            <div class="summary-card-header">
+              <span>Confidence Index</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="m16.2 7.8-2 2"></path><circle cx="12" cy="12" r="1"></circle></svg>
+            </div>
+            <div class="summary-card-value" id="summary-val-confidence">0%</div>
+            <div class="progress-bar-container">
+              <div class="progress-bar-fill" id="summary-val-confidence-bar" style="width: 0%"></div>
+            </div>
+          </div>
+
+          <div class="summary-card" id="summary-card-risk">
+            <div class="summary-card-header">
+              <span>Risk Severity</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            </div>
+            <div class="summary-card-value" id="summary-val-risk">Low</div>
+          </div>
+        </div>
+
+        <!-- Executive Summary -->
+        <div class="exec-summary-card">
+          <div class="exec-header">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <span>Regulatory Assessment Executive Summary</span>
+          </div>
+          <div class="exec-text" id="summary-val-executive">Generating...</div>
+        </div>
+
+        <!-- Product Summary Table -->
+        <section class="card">
+          <h3 class="card-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+            Product Applicability Matrix
+          </h3>
+          <div class="summary-table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>CN Code</th>
+                  <th>Destination</th>
+                  <th>Sector</th>
+                  <th>Engine Verdict</th>
+                  <th>AI Match</th>
+                </tr>
+              </thead>
+              <tbody id="summary-table-rows">
+                <!-- dynamic assessment summary rows -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Detailed Product Findings -->
+        <div id="detailed-findings-cards-container">
+          <!-- Injected detailed product evaluations -->
+        </div>
+
+        <!-- Raw JSON details Accordion -->
+        <div class="json-details-card">
+          <div class="json-header" onclick="toggleJsonView()">
+            <span style="font-weight:600; font-size:0.85rem; display:flex; align-items:center; gap:0.5rem;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+              Structured API Output (JSON)
+            </span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="collapse-chevron" id="json-chevron" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </div>
+          <div class="json-body" id="json-raw-content" style="display: none;">
+            <!-- raw json display -->
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Script Logic -->
+  <script>
+    let productsList = [
+      { name: "Steel Pipe", cn_code: "73041000", export_destination: "Germany", annual_export_quantity: 1000, embedded_emissions: 2.5 },
+      { name: "Ferro Silicon", cn_code: "72023000", export_destination: "Germany", annual_export_quantity: 500, embedded_emissions: 1.2 },
+      { name: "Aluminium Sheet", cn_code: "76061100", export_destination: "India", annual_export_quantity: 800, embedded_emissions: 3.1 }
+    ];
+
+    let currentEUCountries = {};
+
+    // Startup Init
+    window.addEventListener("DOMContentLoaded", async () => {
+      // 1. Fetch LLM Config and EU list
+      await fetchConfigInfo();
+      await fetchEUCountries();
+      
+      // 2. Load form values from last search (or default)
+      loadLatestSearchSetup();
+      
+      // 3. Build product forms
+      renderProductsForm();
+      
+      // 4. Render past configurations
+      renderRecentConfigs();
+    });
+
+    async function fetchConfigInfo() {
+      try {
+        const res = await fetch("/api/config");
+        if (res.ok) {
+          const info = await res.json();
+          document.getElementById("llm-model-label").textContent = info.llm_config;
+        }
+      } catch (e) {
+        console.error("Failed to load active LLM info:", e);
+      }
+    }
+
+    async function fetchEUCountries() {
+      try {
+        const res = await fetch("/api/eu-countries");
+        if (res.ok) {
+          currentEUCountries = await res.json();
+        }
+      } catch (e) {
+        console.error("Failed to fetch EU list:", e);
+      }
+    }
+
+    // Load setup from localStorage
+    function loadLatestSearchSetup() {
+      try {
+        const saved = localStorage.getItem("cbam_last_search_config");
+        if (saved) {
+          const config = JSON.parse(saved);
+          if (config.company) {
+            document.getElementById("company-name").value = config.company.name || "";
+            document.getElementById("company-country").value = config.company.country || "";
+            document.getElementById("company-turnover").value = config.company.annual_turnover || "";
+            document.getElementById("company-subsidiary").checked = !!config.company.has_eu_subsidiary;
+            document.getElementById("company-branch").checked = !!config.company.has_eu_branch;
+            document.getElementById("company-listed").checked = !!config.company.is_listed_in_eu;
+          }
+          if (config.products && config.products.length > 0) {
+            productsList = config.products;
+          }
+        } else {
+          // Defaults if no storage
+          document.getElementById("company-name").value = "ABC Ltd";
+          document.getElementById("company-country").value = "India";
+          document.getElementById("company-turnover").value = "5000000";
+        }
+      } catch (e) {
+        console.warn("Could not load from localStorage:", e);
+      }
+    }
+
+    // Save current setup to localStorage
+    function saveSearchSetup() {
+      try {
+        const config = getFormConfiguration();
+        localStorage.setItem("cbam_last_search_config", JSON.stringify(config));
+        
+        // Add to history list
+        let history = JSON.parse(localStorage.getItem("cbam_history_list") || "[]");
+        // Remove duplicate entry by company name + product count
+        history = history.filter(item => !(item.company.name === config.company.name && item.products.length === config.products.length));
+        history.unshift(config);
+        
+        // Keep max 3 entries
+        if (history.length > 3) history = history.slice(0, 3);
+        
+        localStorage.setItem("cbam_history_list", JSON.stringify(history));
+        renderRecentConfigs();
+      } catch (e) {
+        console.warn("Storage save failed:", e);
+      }
+    }
+
+    function getFormConfiguration() {
+      const pElements = document.querySelectorAll(".product-item");
+      const products = [];
+      pElements.forEach(p => {
+        const id = p.dataset.id;
+        products.push({
+          name: document.getElementById(`prod-name-${id}`).value,
+          cn_code: document.getElementById(`prod-cn-${id}`).value,
+          export_destination: document.getElementById(`prod-dest-${id}`).value,
+          annual_export_quantity: parseFloat(document.getElementById(`prod-qty-${id}`).value) || 0,
+          embedded_emissions: document.getElementById(`prod-emissions-${id}`).value !== "" 
+            ? parseFloat(document.getElementById(`prod-emissions-${id}`).value) 
+            : ""
+        });
+      });
+      return {
+        company: {
+          name: document.getElementById("company-name").value,
+          country: document.getElementById("company-country").value,
+          annual_turnover: parseInt(document.getElementById("company-turnover").value) || 0,
+          has_eu_subsidiary: document.getElementById("company-subsidiary").checked,
+          has_eu_branch: document.getElementById("company-branch").checked,
+          is_listed_in_eu: document.getElementById("company-listed").checked
+        },
+        products: products
+      };
+    }
+
+    function loadSavedHistoryConfig(idx) {
+      try {
+        const history = JSON.parse(localStorage.getItem("cbam_history_list") || "[]");
+        const config = history[idx];
+        if (config) {
+          document.getElementById("company-name").value = config.company.name || "";
+          document.getElementById("company-country").value = config.company.country || "";
+          document.getElementById("company-turnover").value = config.company.annual_turnover || "";
+          document.getElementById("company-subsidiary").checked = !!config.company.has_eu_subsidiary;
+          document.getElementById("company-branch").checked = !!config.company.has_eu_branch;
+          document.getElementById("company-listed").checked = !!config.company.is_listed_in_eu;
+          
+          productsList = config.products;
+          renderProductsForm();
+        }
+      } catch (e) {
+        console.error("Load config failed:", e);
+      }
+    }
+
+    function renderRecentConfigs() {
+      const list = document.getElementById("recent-configs-list");
+      list.innerHTML = "";
+      try {
+        const history = JSON.parse(localStorage.getItem("cbam_history_list") || "[]");
+        if (history.length === 0) {
+          list.innerHTML = `<span style="font-size:0.8rem;color:var(--text-faint);">No recent setups saved.</span>`;
+          return;
+        }
+        history.forEach((config, idx) => {
+          const item = document.createElement("div");
+          item.className = "recent-item";
+          item.onclick = () => loadSavedHistoryConfig(idx);
+          
+          item.innerHTML = `
+            <div class="recent-info">
+              <span class="recent-company">${config.company.name || "Unnamed"}</span>
+              <span class="recent-meta">${config.products.length} product(s) • ${config.company.country}</span>
+            </div>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;color:var(--color-primary);"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          `;
+          list.appendChild(item);
+        });
+      } catch (e) {
+        list.innerHTML = `<span style="font-size:0.8rem;color:var(--text-faint);">History not available.</span>`;
+      }
+    }
+
+    function renderProductsForm() {
+      const wrapper = document.getElementById("products-list-wrapper");
+      wrapper.innerHTML = "";
+      
+      productsList.forEach((product, idx) => {
+        const formId = `p-${idx}`;
+        const item = document.createElement("div");
+        item.className = "product-item";
+        item.dataset.id = formId;
+        item.innerHTML = `
+          <div class="product-header">
+            <span class="product-title">Product ${idx + 1}</span>
+            <button class="btn-delete-product" onclick="removeProductForm('${idx}')" title="Remove Product">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+            </button>
+          </div>
+          <div class="form-group-grid">
+            <div class="field form-group-full">
+              <span class="field-label">Official Description (Auto-populated)</span>
+              <input type="text" id="prod-name-${formId}" value="${product.name}" placeholder="Enter CN Code to auto-fill description..." readonly style="opacity: 0.85; background: rgba(255, 255, 255, 0.01); cursor: not-allowed;">
+            </div>
+            
+            <div class="field">
+              <span class="field-label">CN Code</span>
+              <div class="autocomplete-wrapper">
+                <input type="text" id="prod-cn-${formId}" value="${product.cn_code}" placeholder="e.g. 73041000" oninput="handleCNInput(this, '${formId}')" onblur="handleCNBlur(this, '${formId}')" autocomplete="off">
+                <div class="autocomplete-dropdown" id="prod-dropdown-${formId}"></div>
+              </div>
+            </div>
+
+            <div class="field">
+              <span class="field-label">Export Destination</span>
+              <input type="text" id="prod-dest-${formId}" value="${product.export_destination}" placeholder="e.g. Germany">
+            </div>
+
+            <div class="field">
+              <span class="field-label">Annual Quantity (t)</span>
+              <input type="number" id="prod-qty-${formId}" value="${product.annual_export_quantity}" placeholder="e.g. 1000">
+            </div>
+
+            <div class="field">
+              <span class="field-label">Embedded Emissions (tCO₂e/t)</span>
+              <input type="number" step="any" id="prod-emissions-${formId}" value="${product.embedded_emissions !== undefined ? product.embedded_emissions : ''}" placeholder="e.g. 2.5">
+            </div>
+          </div>
+        `;
+        wrapper.appendChild(item);
+      });
+    }
+
+    function addNewProductForm() {
+      // Collect current input states so we don't wipe them out
+      const current = getFormConfiguration();
+      productsList = current.products;
+      
+      productsList.push({
+        name: "",
+        cn_code: "",
+        export_destination: "",
+        annual_export_quantity: 0,
+        embedded_emissions: ""
+      });
+      renderProductsForm();
+    }
+
+    function removeProductForm(idx) {
+      const current = getFormConfiguration();
+      productsList = current.products;
+      
+      productsList.splice(parseInt(idx), 1);
+      renderProductsForm();
+    }
+
+    // CN Code Autocomplete / Lookup Handler
+    let cnLookupTimeout;
+    function handleCNInput(inputElem, formId) {
+      clearTimeout(cnLookupTimeout);
+      const query = inputElem.value.trim();
+      const dropdown = document.getElementById(`prod-dropdown-${formId}`);
+      
+      if (!query || query.length < 2) {
+        dropdown.style.display = "none";
+        return;
+      }
+
+      cnLookupTimeout = setTimeout(async () => {
+        try {
+          const res = await fetch(`/api/cn-lookup?q=${encodeURIComponent(query)}`);
+          if (res.ok) {
+            const matches = await res.json();
+            if (matches.length > 0) {
+              dropdown.innerHTML = "";
+              matches.forEach(item => {
+                const row = document.createElement("div");
+                row.className = "autocomplete-item";
+                row.innerHTML = `
+                  <strong>${item.prefix}</strong> - ${item.description.slice(0, 50)}...
+                  <span class="sector-tag">${item.sector || 'N/A'}</span>
+                `;
+                row.onclick = () => {
+                  inputElem.value = item.prefix;
+                  // Always override name/description with official description
+                  const nameField = document.getElementById(`prod-name-${formId}`);
+                  // Clean description: take up to semicolon or comma, max 70 chars for display
+                  let cleanDesc = item.description.split(';')[0].split(',')[0].trim();
+                  if (cleanDesc.length > 70) cleanDesc = cleanDesc.slice(0, 67) + "...";
+                  nameField.value = cleanDesc;
+                  dropdown.style.display = "none";
+                };
+                dropdown.appendChild(row);
+              });
+              dropdown.style.display = "block";
+            } else {
+              dropdown.style.display = "none";
+            }
+          }
+        } catch (e) {
+          console.error("CN lookup failed:", e);
+        }
+      }, 250);
+    }
+
+    // Auto-populate when manually typed CN Code loses focus
+    async function handleCNBlur(inputElem, formId) {
+      // Delay slightly so that click events on the autocomplete drop down registers first
+      setTimeout(async () => {
+        const query = inputElem.value.trim();
+        if (!query) return;
+        try {
+          const res = await fetch(`/api/cn-lookup?q=${encodeURIComponent(query)}`);
+          if (res.ok) {
+            const matches = await res.json();
+            // Find an exact match or first prefix match
+            const match = matches.find(item => item.prefix === query) || matches[0];
+            if (match) {
+              const nameField = document.getElementById(`prod-name-${formId}`);
+              let cleanDesc = match.description.split(';')[0].split(',')[0].trim();
+              if (cleanDesc.length > 70) cleanDesc = cleanDesc.slice(0, 67) + "...";
+              nameField.value = cleanDesc;
+            }
+          }
+        } catch (e) {
+          console.error("CN blur lookup failed:", e);
+        }
+      }, 200);
+    }
+
+    // Close autocomplete lists when clicking outside
+    document.addEventListener("click", (e) => {
+      if (!e.target.closest(".autocomplete-wrapper")) {
+        document.querySelectorAll(".autocomplete-dropdown").forEach(d => {
+          d.style.display = "none";
+        });
+      }
+    });
+
+    // STREAMING API CALL
+    async function triggerCBAMAssessment() {
+      // 1. UI Status Changes
+      const submitBtn = document.getElementById("btn-submit-assessment");
+      submitBtn.disabled = true;
+      
+      const idlePanel = document.getElementById("panel-state-idle");
+      const runningPanel = document.getElementById("panel-state-running");
+      const resultsPanel = document.getElementById("panel-state-results");
+      
+      idlePanel.style.display = "none";
+      resultsPanel.style.display = "none";
+      runningPanel.style.display = "flex";
+      
+      const progressContainer = document.getElementById("running-activity-steps-container");
+      progressContainer.innerHTML = "";
+
+      // Save configurations
+      saveSearchSetup();
+
+      const config = getFormConfiguration();
+
+      try {
+        const response = await fetch("/api/assess", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(config)
+        });
+
+        if (!response.ok) {
+          throw new Error(`Server returned HTTP status ${response.status}`);
+        }
+
+        // Setup NDJSON Reader
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder("utf-8");
+        let buffer = "";
+        
+        let allProductDecisions = [];
+        let runningLlmConfig = "";
+
+        while (true) {
+          const { value, done } = await reader.read();
+          if (done) break;
+
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split("\n");
+          
+          // Keep the last partial line in the buffer
+          buffer = lines.pop();
+
+          for (const line of lines) {
+            if (!line.trim()) continue;
+            const event = JSON.parse(line);
+            
+            // Handle streaming events
+            if (event.type === "init") {
+              runningLlmConfig = event.llm_config;
+              document.getElementById("llm-model-label").textContent = runningLlmConfig;
+              
+              const step = document.createElement("div");
+              step.className = "activity-step-row active";
+              step.innerHTML = `
+                <span class="activity-step-indicator"></span>
+                <span class="activity-step-text">Initialized session using ${event.llm_config}</span>
+              `;
+              progressContainer.appendChild(step);
+            } 
+            else if (event.type === "progress") {
+              // Deactivate previous active steps
+              document.querySelectorAll(".activity-step-row.active").forEach(el => {
+                el.classList.remove("active");
+                el.classList.add("completed");
+              });
+
+              const step = document.createElement("div");
+              step.className = "activity-step-row active";
+              step.innerHTML = `
+                <span class="activity-step-indicator"></span>
+                <span class="activity-step-text">[Product ${event.product_index + 1}] ${event.status}</span>
+              `;
+              progressContainer.appendChild(step);
+              progressContainer.scrollTop = progressContainer.scrollHeight;
+            } 
+            else if (event.type === "product_result") {
+              allProductDecisions.push(event);
+            }
+          }
+        }
+
+        // Render completed results
+        runningPanel.style.display = "none";
+        resultsPanel.style.display = "flex";
+        
+        renderCompletedAssessment(allProductDecisions, runningLlmConfig);
+
+      } catch (err) {
+        console.error("Assessment request failed:", err);
+        alert(`Assessment Error: ${err.message}`);
+        
+        runningPanel.style.display = "none";
+        idlePanel.style.display = "flex";
+      } finally {
+        submitBtn.disabled = false;
+      }
+    }
+
+    function renderCompletedAssessment(resultsList, llmConfig) {
+      // 1. Overall Calculations
+      const anyApplicable = resultsList.some(r => r.decision.cbam_applicable);
+      
+      // Calculate avg confidence index
+      let sumConf = 0;
+      resultsList.forEach(r => sumConf += (r.ai.confidence || 0.95));
+      const avgConfidence = Math.round((sumConf / resultsList.length) * 100);
+
+      // Determine highest Risk level
+      const risks = resultsList.map(r => r.ai.risk_rating);
+      let riskVerdict = "Low";
+      if (risks.includes("High")) riskVerdict = "High";
+      else if (risks.includes("Medium")) riskVerdict = "Medium";
+
+      // 2. Summary Cards Updates
+      const verdictCard = document.getElementById("summary-card-verdict");
+      const verdictVal = document.getElementById("summary-val-verdict");
+      
+      verdictVal.textContent = anyApplicable ? "Yes" : "No";
+      verdictCard.className = "summary-card " + (anyApplicable ? "applicable" : "not-applicable");
+
+      document.getElementById("summary-val-confidence").textContent = `${avgConfidence}%`;
+      document.getElementById("summary-val-confidence-bar").style.width = `${avgConfidence}%`;
+
+      const riskCard = document.getElementById("summary-card-risk");
+      const riskVal = document.getElementById("summary-val-risk");
+      riskVal.textContent = riskVerdict;
+      riskCard.className = "summary-card"; // reset
+      if (riskVerdict === "High") riskCard.style.borderColor = "rgba(239, 68, 68, 0.2)";
+      else if (riskVerdict === "Medium") riskCard.style.borderColor = "rgba(245, 158, 11, 0.2)";
+      else riskCard.style.borderColor = "rgba(16, 185, 129, 0.2)";
+
+      // 3. Generate Executive Summary
+      const companyName = document.getElementById("company-name").value || "the company";
+      const productCount = resultsList.length;
+      let summaryText = "";
+      if (anyApplicable) {
+        summaryText = `Based on the ${productCount} product(s) submitted, ${companyName} has lines that fall within the material scope of CBAM and exceed de-minimis limits. A formal Surrender of CBAM certificates and quarterly declarations are required.`;
+      } else {
+        summaryText = `Based on the ${productCount} product(s) submitted, none currently fall under the scope of CBAM regulation — either due to exclusion status or geographical destinations outside the EU Customs union.`;
+      }
+      document.getElementById("summary-val-executive").textContent = summaryText;
+
+      // 4. Update Product matrix table
+      const tbody = document.getElementById("summary-table-rows");
+      tbody.innerHTML = "";
+      
+      resultsList.forEach((r, idx) => {
+        const tr = document.createElement("tr");
+        const dec = r.decision;
+        const ai = r.ai;
+        
+        tr.innerHTML = `
+          <td><strong>${dec.product_name}</strong></td>
+          <td class="tabular">${dec.cn_code}</td>
+          <td>${dec.destination}</td>
+          <td>${dec.sector || "N/A"}</td>
+          <td>
+            <span class="badge ${dec.cbam_applicable ? 'badge-danger' : 'badge-success'}">
+              ${dec.cbam_applicable ? 'Applicable' : 'Not Applicable'}
+            </span>
+          </td>
+          <td>
+            <span class="badge ${ai.applicable ? 'badge-danger' : 'badge-success'}">
+              ${ai.applicable ? 'Applicable' : 'Not Applicable'}
+            </span>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      // 5. Update Detailed Product Findings
+      const detailedContainer = document.getElementById("detailed-findings-cards-container");
+      detailedContainer.innerHTML = "";
+
+      resultsList.forEach((r, idx) => {
+        const dec = r.decision;
+        const ai = r.ai;
+        
+        const card = document.createElement("div");
+        card.className = "product-result-card";
+        card.id = `result-card-${idx}`;
+        
+        // Build Rule Checks HTML
+        let checksHTML = "";
+        dec.checks.forEach(check => {
+          const passClass = check.result ? "pass" : "fail";
+          const statusText = check.result ? "PASS" : "FAIL";
+          checksHTML += `
+            <div class="rule-step-box ${passClass}">
+              <div class="rule-step-header ${passClass}">
+                <span>${check.rule}</span>
+                <span class="status-tag">${statusText}</span>
+              </div>
+              <div class="rule-step-desc">${check.detail}</div>
+              ${check.rule_reference ? `<div class="rule-step-ref">📎 ${check.rule_reference}</div>` : ""}
+            </div>
+          `;
+        });
+
+        // Recommendations List HTML
+        let recsHTML = "";
+        if (ai.recommendations && ai.recommendations.length > 0) {
+          recsHTML = `
+            <div class="ai-field">
+              <span class="ai-field-label">Consultant Recommendations</span>
+              <div class="ai-list">
+                ${ai.recommendations.map(rec => `<div class="ai-list-item">${rec}</div>`).join("")}
+              </div>
+            </div>
+          `;
+        }
+
+        // Missing Info HTML
+        let missingHTML = "";
+        if (ai.missing_information && ai.missing_information.length > 0) {
+          missingHTML = `
+            <div class="ai-field" style="margin-top: 0.5rem;">
+              <span class="ai-field-label" style="color:var(--color-warning);">Identified Gaps</span>
+              <div class="ai-list">
+                ${ai.missing_information.map(m => `<div class="ai-list-item" style="color:var(--color-warning);">${m}</div>`).join("")}
+              </div>
+            </div>
+          `;
+        }
+
+        // Articles HTML
+        let articlesHTML = "";
+        if (ai.articles && ai.articles.length > 0) {
+          articlesHTML = `
+            <div class="ai-field">
+              <span class="ai-field-label">Regulatory References</span>
+              <div class="ai-list">
+                ${ai.articles.map(art => `<div class="ai-list-item">${art}</div>`).join("")}
+              </div>
+            </div>
+          `;
+        }
+
+        card.innerHTML = `
+          <div class="product-result-header" onclick="toggleResultCard(${idx})">
+            <div class="product-result-header-left">
+              <div class="product-result-icon">${idx + 1}</div>
+              <div>
+                <div class="product-result-name">${dec.product_name}</div>
+                <div class="product-result-meta">CN: ${dec.cn_code} • Target: ${dec.destination}</div>
+              </div>
+            </div>
+            <div style="display:flex; align-items:center; gap:0.75rem;">
+              <span class="badge ${dec.cbam_applicable ? 'badge-danger' : 'badge-success'}">
+                ${dec.cbam_applicable ? 'CBAM APPLICABLE' : 'NOT APPLICABLE'}
+              </span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="collapse-chevron" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+          </div>
+          
+          <div class="product-result-body">
+            
+            <!-- Left: Rule Chain -->
+            <div class="rule-chain-section">
+              <span class="rule-chain-title">Deterministic Chain Analysis</span>
+              ${checksHTML}
+            </div>
+
+            <!-- Right: AI Narratives -->
+            <div class="ai-assessment-section">
+              <div class="ai-section-header">
+                <span class="ai-section-title">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                  AI Copilot Insight
+                </span>
+                <span class="badge badge-neutral" style="font-size:0.65rem;">Confidence: ${Math.round(ai.confidence*100)}%</span>
+              </div>
+              
+              ${ai.llm_overrode ? `
+                <div class="override-banner">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                  <span><strong>AI Corrected:</strong> The AI assessment generated a variance, deterministic engine output applied.</span>
+                </div>
+              ` : ""}
+
+              <div class="ai-field">
+                <span class="ai-field-label">Regulatory Narrative</span>
+                <p class="ai-reasoning-text">${ai.reasoning}</p>
+              </div>
+
+              ${articlesHTML}
+              ${recsHTML}
+              ${missingHTML}
+              
+              <div class="ai-field" style="margin-top:0.5rem; padding-top:0.5rem; border-top:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center;">
+                <span class="ai-field-label">Risk Exposure</span>
+                <span class="badge ${ai.risk_rating === 'High' ? 'badge-danger' : ai.risk_rating === 'Medium' ? 'badge-warning' : 'badge-success'}">${ai.risk_rating}</span>
+              </div>
+
+            </div>
+
+          </div>
+        `;
+        detailedContainer.appendChild(card);
+      });
+
+      // 6. Raw JSON
+      document.getElementById("json-raw-content").textContent = JSON.stringify(resultsList, null, 2);
+    }
+
+    function toggleResultCard(idx) {
+      const card = document.getElementById(`result-card-${idx}`);
+      card.classList.toggle("collapsed");
+    }
+
+    function toggleJsonView() {
+      const viewer = document.getElementById("json-raw-content");
+      const chevron = document.getElementById("json-chevron");
+      if (viewer.style.display === "none") {
+        viewer.style.display = "block";
+        chevron.style.transform = "rotate(180deg)";
+      } else {
+        viewer.style.display = "none";
+        chevron.style.transform = "rotate(0deg)";
+      }
+    }
+  </script>
+
+</body>
+</html>

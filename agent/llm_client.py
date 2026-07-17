@@ -22,6 +22,16 @@ class LLMClient:
         if self.use_llm == "ollama":
             self.ollama_client = OllamaClientLib(host=self.ollama_host)
 
+    def describe(self) -> str:
+        """
+        Return a one-line description of the active LLM config for display at startup.
+        """
+        if self.use_llm == "groq":
+            key_status = f"key={'***' + self.groq_api_key[-4:] if self.groq_api_key else 'NOT SET'}"
+            return f"Groq  | model={self.model} | {key_status}"
+        else:
+            return f"Ollama | model={self.model} | host={self.ollama_host}"
+
     def chat(
         self,
         system_prompt: str,
@@ -58,18 +68,29 @@ class LLMClient:
 
         try:
             response = requests.post(url, headers=headers, json=payload, timeout=30)
+
+            if response.status_code == 401:
+                raise RuntimeError(
+                    "Groq API returned 401 Unauthorized.\n"
+                    "Your GROQ_API_KEY is invalid or expired.\n"
+                    "Get a fresh key at: https://console.groq.com/keys\n"
+                    "Then update GROQ_API_KEY in your .env file."
+                )
+
             response.raise_for_status()
             res_data = response.json()
-            
+
             choices = res_data.get("choices", [])
             if not choices:
                 raise RuntimeError("Empty choices returned from Groq API.")
-                
+
             content = choices[0].get("message", {}).get("content", "").strip()
             if not content:
                 raise RuntimeError("Groq API returned an empty message content.")
-                
+
             return content
+        except RuntimeError:
+            raise
         except Exception as e:
             raise RuntimeError(
                 f"Failed to communicate with Groq API (Model: {self.model}).\n"

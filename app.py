@@ -171,6 +171,9 @@ def main():
     ]
 
     # ── HEADER ────────────────────────────────────────────────────────────────
+    ai     = AIOrchestrator()   # init early so we can show LLM config
+    parser = OutputParser()
+
     print()
     line("═")
     print("  AI-NATIVE REGULATORY INTELLIGENCE PLATFORM")
@@ -178,6 +181,7 @@ def main():
     line("═")
     print(f"\n  Company    : {company.name}  ({company.country})")
     print(f"  Products   : {len(products)}")
+    print(f"  LLM        : {ai.client.describe()}")
 
     # ── STEP 1: DETERMINISTIC RULE ENGINE ─────────────────────────────────────
     print("\n\n── DETERMINISTIC RULE ENGINE ─────────────────────────────────────────────")
@@ -193,10 +197,7 @@ def main():
     print_summary_table(decisions)
 
     # ── STEP 2: AI NARRATIVE — PER PRODUCT ────────────────────────────────────
-    print("\n\n── AI NARRATIVE (per product) ────────────────────────────────────────────")
-
-    ai     = AIOrchestrator()
-    parser = OutputParser()
+    print(f"\n\n── AI NARRATIVE (per product) · {ai.client.describe()} ────────────────────")
 
     per_product_results = ai.assess_each(company, products)
 
