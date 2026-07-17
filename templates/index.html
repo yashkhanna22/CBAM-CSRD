@@ -842,19 +842,21 @@
     }
 
     .summary-card.applicable {
-      border-color: rgba(239, 68, 68, 0.2);
+      border-color: rgba(16, 185, 129, 0.25);
+      background: rgba(16, 185, 129, 0.04);
     }
     
     .summary-card.applicable .summary-card-value {
-      color: var(--color-danger);
+      color: var(--color-success);
     }
 
     .summary-card.not-applicable {
-      border-color: rgba(16, 185, 129, 0.2);
+      border-color: rgba(239, 68, 68, 0.25);
+      background: rgba(239, 68, 68, 0.04);
     }
 
     .summary-card.not-applicable .summary-card-value {
-      color: var(--color-success);
+      color: var(--color-danger);
     }
 
     /* Progress ring / bar inside summary */
@@ -2003,12 +2005,12 @@
           <td>${dec.destination}</td>
           <td>${dec.sector || "N/A"}</td>
           <td>
-            <span class="badge ${dec.cbam_applicable ? 'badge-danger' : 'badge-success'}">
+            <span class="badge ${dec.cbam_applicable ? 'badge-success' : 'badge-danger'}">
               ${dec.cbam_applicable ? 'Applicable' : 'Not Applicable'}
             </span>
           </td>
           <td>
-            <span class="badge ${ai.applicable ? 'badge-danger' : 'badge-success'}">
+            <span class="badge ${ai.applicable ? 'badge-success' : 'badge-danger'}">
               ${ai.applicable ? 'Applicable' : 'Not Applicable'}
             </span>
           </td>
@@ -2094,7 +2096,7 @@
               </div>
             </div>
             <div style="display:flex; align-items:center; gap:0.75rem;">
-              <span class="badge ${dec.cbam_applicable ? 'badge-danger' : 'badge-success'}">
+              <span class="badge ${dec.cbam_applicable ? 'badge-success' : 'badge-danger'}">
                 ${dec.cbam_applicable ? 'CBAM APPLICABLE' : 'NOT APPLICABLE'}
               </span>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="collapse-chevron" style="width:16px;height:16px;"><polyline points="6 9 12 15 18 9"></polyline></svg>
