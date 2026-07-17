@@ -27,10 +27,12 @@ class LLMClient:
         Return a one-line description of the active LLM config for display at startup.
         """
         if self.use_llm == "groq":
-            key_status = f"key={'***' + self.groq_api_key[-4:] if self.groq_api_key else 'NOT SET'}"
-            return f"Groq  | model={self.model} | {key_status}"
+            # Strip verbose suffixes for display (e.g. -versatile, -preview)
+            short_model = self.model.replace("-versatile", "").replace("-preview", "")
+            return f"Groq | model={short_model}"
         else:
-            return f"Ollama | model={self.model} | host={self.ollama_host}"
+            short_model = self.model
+            return f"Ollama | model={short_model}"
 
     def chat(
         self,

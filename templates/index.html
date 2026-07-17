@@ -112,80 +112,130 @@
     }
 
     header {
-      background: rgba(7, 10, 19, 0.8);
-      backdrop-filter: blur(12px);
+      background: rgba(7, 10, 19, 0.92);
+      backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--border-color);
       position: sticky;
       top: 0;
       z-index: 40;
+      /* Subtle accent line at top of header */
+      box-shadow: 0 1px 0 0 rgba(20,184,166,0.2), 0 4px 24px rgba(0,0,0,0.4);
     }
 
     .header-container {
       max-width: 1600px;
       margin: 0 auto;
-      padding: 0 2rem;
-      height: 70px;
+      padding: 0 2.5rem;
+      height: 64px;
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
 
+    /* LEFT: Brand */
     .brand {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      gap: 0.85rem;
     }
 
-    .brand-icon {
-      width: 38px;
-      height: 38px;
-      border-radius: 12px;
+    .brand-icon-mark {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
       background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
       display: grid;
       place-items: center;
-      box-shadow: 0 4px 15px rgba(20, 184, 166, 0.3);
+      box-shadow: 0 2px 12px rgba(20,184,166,0.35);
+      flex-shrink: 0;
     }
 
-    .brand-icon svg {
-      width: 20px;
-      height: 20px;
+    .brand-icon-mark svg {
+      width: 18px;
+      height: 18px;
       color: #fff;
     }
 
     .brand-text {
-      line-height: 1.2;
+      display: flex;
+      flex-direction: column;
+      line-height: 1;
     }
 
     .brand-title {
       font-family: var(--font-display);
       font-weight: 700;
-      font-size: 1.15rem;
+      font-size: 1.1rem;
       letter-spacing: -0.02em;
+      background: linear-gradient(90deg, #f1f5f9 60%, var(--color-primary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
-    .brand-subtitle {
-      font-size: 0.7rem;
-      color: var(--text-sub);
+    .brand-tag {
+      font-size: 0.62rem;
+      font-weight: 500;
+      color: var(--color-primary);
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.12em;
+      margin-top: 3px;
     }
 
+    /* Vertical divider */
+    .header-divider {
+      width: 1px;
+      height: 28px;
+      background: var(--border-color);
+      margin: 0 0.5rem;
+    }
+
+    /* RIGHT: system status */
     .system-status {
       display: flex;
       align-items: center;
-      gap: 1.5rem;
+      gap: 1rem;
+    }
+
+    /* LLM chip */
+    .llm-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(20,184,166,0.07);
+      border: 1px solid rgba(20,184,166,0.22);
+      padding: 0.32rem 0.85rem;
+      border-radius: 99px;
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: var(--text-sub);
+      white-space: nowrap;
+    }
+
+    .llm-chip .chip-label {
+      color: rgba(255,255,255,0.4);
+      font-weight: 400;
+      margin-right: 0.1rem;
+    }
+
+    .llm-chip strong {
+      color: var(--color-primary);
+      font-weight: 600;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
     }
 
     .status-badge {
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.4rem;
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid var(--border-color);
-      padding: 0.35rem 0.85rem;
+      padding: 0.32rem 0.8rem;
       border-radius: 99px;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       font-weight: 500;
+      color: var(--text-sub);
     }
 
     .status-dot {
@@ -194,18 +244,12 @@
       border-radius: 50%;
       background-color: var(--color-success);
       box-shadow: 0 0 8px var(--color-success);
+      animation: pulse-dot 2.5s ease-in-out infinite;
     }
 
-    .active-llm-indicator {
-      font-size: 0.75rem;
-      color: var(--text-sub);
-      display: flex;
-      align-items: center;
-      gap: 0.35rem;
-    }
-
-    .active-llm-indicator strong {
-      color: var(--text-main);
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; box-shadow: 0 0 6px var(--color-success); }
+      50% { opacity: 0.7; box-shadow: 0 0 12px var(--color-success); }
     }
 
     /* Main Grid */
@@ -1229,24 +1273,27 @@
   
   <header>
     <div class="header-container">
+      <!-- Brand -->
       <div class="brand">
-        <div class="brand-icon">
-          <!-- Leaf / Sparkles Icon Combined -->
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 3.5 1 8a7 7 0 0 1-9 10Z"></path>
-            <path d="M9 22v-4"></path>
+        <div class="brand-icon-mark">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
           </svg>
         </div>
         <div class="brand-text">
-          <div class="brand-title">PwC Antigravity</div>
-          <div class="brand-subtitle">CBAM AI Regulatory Intelligence</div>
+          <div class="brand-title">AI Regulatory Intelligence</div>
+          <div class="brand-tag">CBAM &amp; CSRD Assessment</div>
         </div>
       </div>
 
+      <!-- Right: LLM Engine + Status -->
       <div class="system-status">
-        <div class="active-llm-indicator" id="llm-indicator-banner">
-          LLM Engine: <strong id="llm-model-label">Loading...</strong>
+        <div class="llm-chip" id="llm-indicator-banner">
+          <span class="chip-label">LLM Engine</span>
+          <strong id="llm-model-label">Loading...</strong>
         </div>
+        <div class="header-divider"></div>
         <div class="status-badge">
           <span class="status-dot"></span>
           <span>Engine Online</span>
