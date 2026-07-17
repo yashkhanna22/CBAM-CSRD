@@ -4,6 +4,8 @@
 > Language Models with deterministic validation to automate EU
 > regulatory compliance assessments.
 
+🔗 **Live Demo:** [cbam-csrd.onrender.com](https://cbam-csrd.onrender.com/)
+
 **Current Module:** Carbon Border Adjustment Mechanism (CBAM)\
 **Upcoming Module:** Corporate Sustainability Reporting Directive (CSRD)
 
@@ -29,7 +31,7 @@ allowing interchangeable local and cloud inference.
 
 ------------------------------------------------------------------------
 
-# Screenshots
+# Dashboard UI
 
 ### Input Interface
 ![Input Interface](Images/Input.png)
