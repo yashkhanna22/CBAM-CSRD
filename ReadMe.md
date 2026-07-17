@@ -102,8 +102,8 @@ CBAM Rule Engine             Prompt Builder
  Deterministic Context        Regulatory Prompt
         └─────────────┬─────────────┘
                       ▼
-                Groq API
-          Llama-3.3-70B
+                Groq API : Llama-3/ Ollama : Qwen-3.5
+          
                       │
                       ▼
               JSON Response
