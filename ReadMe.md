@@ -29,6 +29,16 @@ allowing interchangeable local and cloud inference.
 
 ------------------------------------------------------------------------
 
+# Screenshots
+
+### Input Interface
+![Input Interface](Images/Input.png)
+
+### Output Report
+![Output Report](Images/Output%20report.png)
+
+------------------------------------------------------------------------
+
 # Features
 
 -   AI-powered CBAM assessments
